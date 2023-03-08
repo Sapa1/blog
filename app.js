@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const admin = require("./routes/admin");
 const path = require("path");
-// const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 //!Configurações
 //Body Parser
@@ -22,18 +22,32 @@ app.engine(
 
 app.set("view engine", "handlebars");
 
-//Mongoose ( em breve )
+//Mongoose
+mongoose.Promise = global.Promise;
+mongoose.set("strictQuery", true);
+mongoose
+  .connect("mongodb://127.0.0.1:27017/aprendendo")
+  .then(() => {
+    console.log("conectado ao mongo");
+  })
+  .catch((erro) => {
+    console.log("Erro ao se conectar: " + erro);
+  });
 
 //Public
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+  console.log("Oi, eu sou um middleware");
+  next();
+});
+
 //!Rotas
 app.get("/", (req, res) => {
-    res.send("Rota principal");
-//   res.render("admin/index");
+  res.send("Rota principal");
 });
+
 app.get("/admin", (req, res) => {
-  //   res.send("Rota principal");
   res.render("admin/index");
 });
 app.use("/admin", admin);
