@@ -29,4 +29,4 @@ const Postagem = new Schema({
   },
 });
 
-mongo.model("postagens", Postagem);
+mongoose.model("postagens", Postagem);
