@@ -12,8 +12,8 @@ const Categoria = new Schema({
   },
   date: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
-mongoose.model("Categorias", Categoria);
+mongoose.model("categorias", Categoria);
