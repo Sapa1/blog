@@ -119,7 +119,7 @@ router.post("/categorias/edit", (req, res) => {
 });
 
 router.post("/categorias/deletar", (req, res) => {
-  Categoria.remove({ _id: req.body.id })
+  Categoria.deleteOne({ _id: req.body.id })
     .then(() => {
       req.flash("success_msg", "Categoria deletada com sucesso!");
       res.redirect("/admin/categorias");
@@ -241,6 +241,18 @@ router.post("/postagem/edit", (req, res) => {
     .catch((err) => {
       console.log(err);
       req.flash("error_msg", "Houve um erro ao salvar a edição");
+      res.redirect("/admin/postagens");
+    });
+});
+
+router.get("/postagens/deletar/:id", (req, res) => {
+  Postagem.deleteOne({ _id: req.params.id })
+    .then(() => {
+      req.flash("success_msg", "Postagem deletada com sucesso");
+      res.redirect("/admin/postagens");
+    })
+    .catch((err) => {
+      req.flash("error_msg", "Houve um erro interno");
       res.redirect("/admin/postagens");
     });
 });
