@@ -19,6 +19,7 @@ router.get("/categorias", (req, res) => {
     .sort({ date: "desc" })
     .lean()
     .then((categorias) => {
+      // a chave do map deve ser escrita da mesma forma como se espera que seja na tela que receberá o valor
       res.render("admin/categorias", { categorias: categorias });
     })
     .catch((err) => {
@@ -32,6 +33,7 @@ router.get("/categorias/add", (req, res) => {
 });
 
 router.post("/categorias/nova", (req, res) => {
+  //TODO: lembrar de impedir espaçamento no slug ou caracteres especiais
   var erros = [];
 
   if (
@@ -225,7 +227,7 @@ router.post("/postagem/edit", (req, res) => {
       postagem.slug = req.body.slug;
       postagem.descricao = req.body.descricao;
       postagem.conteudo = req.body.conteudo;
-      postagem.categoria = req.body.categoria;
+      postagem.categoriaPostagem = req.body.categoria;
 
       postagem
         .save()
