@@ -1,3 +1,3 @@
-# blog
+# Blog App
 
-Iniciando estudo em Node
+* Pequeno projeto com a finalidade de iniciar meu conhecimento em Node.JS
