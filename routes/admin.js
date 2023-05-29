@@ -5,16 +5,17 @@ require("../models/Categoria");
 const Categoria = mongoose.model("categorias");
 require("../models/Postagem");
 const Postagem = mongoose.model("postagens");
+const { nivelAdmin } = require("../helpers/nivelAdm");
 
-router.get("/", (req, res) => {
+router.get("/", nivelAdmin, (req, res) => {
   res.render("admin/index");
 });
 
-router.get("/posts", (req, res) => {
+router.get("/posts", nivelAdmin, (req, res) => {
   res.send("Pagina de posts");
 });
 
-router.get("/categorias", (req, res) => {
+router.get("/categorias", nivelAdmin, (req, res) => {
   Categoria.find()
     .sort({ date: "desc" })
     .lean()
@@ -28,11 +29,11 @@ router.get("/categorias", (req, res) => {
     });
 });
 
-router.get("/categorias/add", (req, res) => {
+router.get("/categorias/add", nivelAdmin, (req, res) => {
   res.render("admin/addcategorias");
 });
 
-router.post("/categorias/nova", (req, res) => {
+router.post("/categorias/nova", nivelAdmin, (req, res) => {
   //TODO: lembrar de impedir espaçamento no slug ou caracteres especiais
   var erros = [];
 
@@ -80,7 +81,7 @@ router.post("/categorias/nova", (req, res) => {
   }
 });
 
-router.get("/categorias/edit/:id", (req, res) => {
+router.get("/categorias/edit/:id", nivelAdmin, (req, res) => {
   Categoria.findOne({ _id: req.params.id })
     .lean()
     .then((categoria) => {
@@ -93,7 +94,7 @@ router.get("/categorias/edit/:id", (req, res) => {
 });
 
 //!validar edicao
-router.post("/categorias/edit", (req, res) => {
+router.post("/categorias/edit", nivelAdmin, (req, res) => {
   Categoria.findOne({ _id: req.body.id })
     .then((categoria) => {
       categoria.nome = req.body.nome;
@@ -120,7 +121,7 @@ router.post("/categorias/edit", (req, res) => {
     });
 });
 
-router.post("/categorias/deletar", (req, res) => {
+router.post("/categorias/deletar", nivelAdmin, (req, res) => {
   Categoria.deleteOne({ _id: req.body.id })
     .then(() => {
       req.flash("success_msg", "Categoria deletada com sucesso!");
@@ -132,7 +133,7 @@ router.post("/categorias/deletar", (req, res) => {
     });
 });
 
-router.get("/postagens", (req, res) => {
+router.get("/postagens", nivelAdmin, (req, res) => {
   Postagem.find()
     .lean()
     .populate("categoriaPostagem")
@@ -146,7 +147,7 @@ router.get("/postagens", (req, res) => {
     });
 });
 
-router.get("/postagens/add", (req, res) => {
+router.get("/postagens/add", nivelAdmin, (req, res) => {
   Categoria.find()
     .lean()
     .then((categorias) => {
@@ -158,7 +159,7 @@ router.get("/postagens/add", (req, res) => {
     });
 });
 
-router.post("/postagens/nova", (req, res) => {
+router.post("/postagens/nova", nivelAdmin, (req, res) => {
   var erros = [];
 
   if (req.body.categoria == "0") {
@@ -189,7 +190,7 @@ router.post("/postagens/nova", (req, res) => {
   }
 });
 
-router.get("/postagens/edit/:id", (req, res) => {
+router.get("/postagens/edit/:id", nivelAdmin, (req, res) => {
   //Pesquisa no mongo pela postagem pegando o parametro id
   Postagem.findOne({ _id: req.params.id })
     .lean()
@@ -220,7 +221,7 @@ router.get("/postagens/edit/:id", (req, res) => {
     });
 });
 
-router.post("/postagem/edit", (req, res) => {
+router.post("/postagem/edit", nivelAdmin, (req, res) => {
   Postagem.findOne({ _id: req.body.id })
     .then((postagem) => {
       postagem.titulo = req.body.titulo;
@@ -247,7 +248,7 @@ router.post("/postagem/edit", (req, res) => {
     });
 });
 
-router.get("/postagens/deletar/:id", (req, res) => {
+router.get("/postagens/deletar/:id", nivelAdmin, (req, res) => {
   Postagem.deleteOne({ _id: req.params.id })
     .then(() => {
       req.flash("success_msg", "Postagem deletada com sucesso");
