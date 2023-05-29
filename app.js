@@ -82,6 +82,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/postagem/:slug", (req, res) => {
+  // buscaUmaPostagem("postagem/index", req, res);
   Postagem.findOne({ slug: req.params.slug })
     .lean()
     .then((postagem) => {
@@ -97,6 +98,24 @@ app.get("/postagem/:slug", (req, res) => {
       res.redirect("/");
     });
 });
+
+// function buscaUmaPostagem(caminho, req, res) {
+//   console.log("Caminho: " + caminho);
+//   Postagem.findOne({ slug: req.params.slug })
+//     .lean()
+//     .then((postagem) => {
+//       if (postagem) {
+//         res.render(caminho, { postagem: postagem });
+//       } else {
+//         req.flash("error_msg", "Esta postagem não existe.");
+//         res.redirect("/");
+//       }
+//     })
+//     .catch((err) => {
+//       req.flash("error_msg", "Houve um erro interno");
+//       res.redirect("/");
+//     });
+// }
 
 app.get("/categorias", (req, res) => {
   Categoria.find()
